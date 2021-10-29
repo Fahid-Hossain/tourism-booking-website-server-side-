@@ -1,4 +1,6 @@
 const express = require('express')
+const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 const cors = require('cors')
 const app = express()
@@ -13,7 +15,6 @@ app.get('/', (req, res) => {
 })
 
 //------- mongodb database connect -------------
-const { MongoClient } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.w2qch.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 // console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -41,6 +42,16 @@ async function run() {
             const cursor = tourCollection.find({})
             const tours = await cursor.toArray();
             res.send(tours);
+        })
+
+        //get single service 
+        app.get("/tours/:id", async(req, res)=>{
+            const id = req.params.id;
+            // console.log("load user with id",id);
+            const query = {_id: ObjectId(id)};
+            const tour = await tourCollection.findOne(query);
+            res.send(tour);
+
         })
 
     } finally {
