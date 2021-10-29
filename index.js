@@ -54,6 +54,15 @@ async function run() {
 
         })
 
+        //delete api
+        app.delete("/tours/:id",async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await tourCollection.deleteOne(query);
+            res.json(result);
+
+        })
+
     } finally {
         // await client.close();
     }
