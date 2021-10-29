@@ -35,6 +35,13 @@ async function run() {
             console.log(result);
             res.json(result);
         })
+        
+        // get api
+        app.get("/tours",async(req, res)=>{
+            const cursor = tourCollection.find({})
+            const tours = await cursor.toArray();
+            res.send(tours);
+        })
 
     } finally {
         // await client.close();
