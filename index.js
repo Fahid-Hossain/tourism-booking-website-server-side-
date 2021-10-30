@@ -26,6 +26,7 @@ async function run() {
         await client.connect();
         const database = client.db("travel_rhythm");
         const tourCollection = database.collection("tours");
+        const myBookingCollection = database.collection("mybookings")
 
         // post api
         app.post("/tours",async(req,res)=>{
@@ -35,6 +36,23 @@ async function run() {
             const result = await tourCollection.insertOne(tours);
             console.log(result);
             res.json(result);
+        })
+
+        // post api my booking
+        app.post("/mybooking",async(req,res)=>{
+            const booking = req.body;
+            console.log("hit the post api",booking);
+
+            const result = await myBookingCollection.insertOne(booking);
+            console.log(result);
+            res.json(result);
+        })
+
+        //get api for my booking
+        app.get("/mybooking",async(req,res) => {
+            const cursor = myBookingCollection.find({})
+            const booking = await cursor.toArray();
+            res.send(booking);
         })
         
         // get api
