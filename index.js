@@ -90,6 +90,23 @@ async function run() {
 
         })
 
+        //update api for booking approved status
+        app.put("/mybooking/:id",async(req, res)=>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const updatedStatus = req.body;
+            // console.log("updated user",id);
+            const options = {upsert: true};
+            const updateDoc = {
+                $set : {
+                    status : updatedStatus,
+                }
+            }
+            // console.log(updatedStatus);
+            const result = await myBookingCollection.updateOne(filter,updateDoc,options);
+            res.json(result);
+        })
+
     } finally {
         // await client.close();
     }
